@@ -35,9 +35,8 @@ export default {
       .shareReplay();
 
     const disable$ = countdown$
-    .do(value => console.log("From disable$", value))
-    .map(value => value !== "Wake up!!!");
-
+      .do(value => console.log("From disable$", value))
+      .map(value => value !== "Wake up!!!");
 
     return {
       countdown$,
