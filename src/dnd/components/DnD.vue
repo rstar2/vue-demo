@@ -1,14 +1,13 @@
 <template>
   <div>
-    <h2>Simple DnD directive (native DnD wrap)</h2>
+    <h2>Simple DnD directive</h2>
+    <h3>1. Nnative DnD wrap - so no mobile.touch support</h3>
+    <h3>2. No model sync - has to do it explicitly in the callbacks</h3>
     <div>
       <h3>Some Tasks</h3>
       <ul>
-        <li v-for="task in tasks"
-            v-bind:key="task.id"
-            v-bind:id="task.id"
-            v-dnd="{handleDragStart, handleDragOver, handleDragEnter, handleDragLeave, handleDragEnd,
-            handleDrop, handleDrag}">
+        <li v-for="task in tasks" v-bind:key="task.id" v-bind:id="task.id"
+            v-dnd="{onDragStart, onDragOver, onDragEnter, onDragLeave, onDragEnd, onDrop, onDrag}">
           <input type="checkbox" v-model="task.completed">
           <strong v-text="task.title"></strong>
         </li>
@@ -16,8 +15,8 @@
     </div>
     <div>
       <h3>Some Images</h3>
-      <span class="image" v-for="(image, index) in images" v-bind:key="index"
-          v-dnd="{handleClick, handleDrag, handleImageDrop}" v-bind:id="index">
+      <span class="image" v-for="(image, index) in images" v-bind:key="index" v-bind:id="index"
+          v-dnd="{onDrag, onDrop : onImageDrop}">
         <img v-bind:src="image.src" v-bind:title="image.name">
       </span>
     </div>
@@ -27,7 +26,7 @@
 </template>
 
 <script>
-import '../directives/drag-and-drop';
+import "../directives/drag-and-drop";
 
 export default {
   data() {
@@ -55,47 +54,39 @@ export default {
     };
   },
   methods: {
-    handleDragStart: function(e) {
-      console.log("handleDragStart", e);
+    onDragStart: function(e) {
       this.loggedEvent = "handleDragStart";
     },
-    handleDragOver: function(e) {
-      console.log("handleDragOver", e);
+    onDragOver: function(e) {
       this.loggedEvent = "handleDragOver";
     },
-    handleDragEnter: function(e) {
-      console.log("handleDragEnter", e);
+    onDragEnter: function(e) {
       this.loggedEvent = "handleDragEnter";
     },
-    handleDragLeave: function(e) {
-      console.log("handleDragLeave", e);
+    onDragLeave: function(e) {
       this.loggedEvent = "handleDragLeave";
     },
-    handleDragEnd: function(e) {
-      console.log("handleDragEnd", e);
+    onDragEnd: function(e) {
       this.loggedEvent = "handleDragEnd";
     },
-    handleDrop: function(e) {
-      console.log("handleDrop-component", this.currentlyDragging, e.target);
+    onDrop: function(e) {
       this.currentlyDragging = null;
       this.loggedEvent = "handleDrop";
+
+      // TODO: this.list.splice(event.newIndex, 0, this.list.splice(event.oldIndex, 1)[0])
     },
-    handleImageDrop: function(e) {
-      console.log("handleImageDrop", this.currentlyDragging, e.target);
+    onImageDrop: function(e) {
       this.currentlyDragging = null;
       this.loggedEvent = "handleImageDrop";
+
+      // TODO: this.list.splice(event.newIndex, 0, this.list.splice(event.oldIndex, 1)[0])
     },
-    handleDrag: function(e) {
-      console.log("handleDrag-component", e);
+    onDrag: function(e) {
       this.loggedEvent = "handleDrag";
       if (!this.currentlyDragging) {
         this.currentlyDragging = e.srcElement;
       }
-    },
-    handleClick: function(e) {
-      console.log("handleClick-component", this.currentlyDragging, e.target);
-      this.loggedEvent = "handleClick";
-    },
+    }
   }
 };
 </script>

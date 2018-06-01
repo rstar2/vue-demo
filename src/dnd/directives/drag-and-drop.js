@@ -7,7 +7,14 @@ Vue.directive('dnd', {
             e.dataTransfer.effectAllowed = 'move';
             // Need to set to something or else drag doesn't start
             e.dataTransfer.setData('text', '*');
-            vnode.context.$emit('drag-start');
+
+            // emit event to the parent component (Note this is not the component that uses the directive, but the parent)
+            vnode.context.$emit('drag-start', e);
+
+            // call a callback method on the direct element using the directive
+            if (binding.value.onDragStart) {
+                binding.value.onDragStart(e);
+            }
         };
 
         const handleDragOver = (e) => {
@@ -18,33 +25,53 @@ Vue.directive('dnd', {
 
             e.dataTransfer.dropEffect = 'move';
             e.target.classList.add('drag-over');
-            vnode.context.$emit('drag-over');
+
+            vnode.context.$emit('drag-over', e);
+            if (binding.value.onDragOver) {
+                binding.value.onDragOver(e);
+            }
 
             return false;
         };
 
         const handleDragEnter = (e) => {
-            vnode.context.$emit('drag-enter');
             e.target.classList.add('drag-enter');
+
+            vnode.context.$emit('drag-enter', e);
+            if (binding.value.onDragEnter) {
+                binding.value.onDragEnter(e);
+            }
         };
 
         const handleDragLeave = (e) => {
-            vnode.context.$emit('drag-leave');
             e.target.classList.remove('drag-enter', 'drag-over');
+
+            vnode.context.$emit('drag-leave', e);
+            if (binding.value.onDragLeave) {
+                binding.value.onDragLeave(e);
+            }
         };
 
         const handleDrag = (e) => {
-            console.log("handleDrag-directive", e);
-            vnode.context.$emit('drag');
+            console.log('handleDrag-directive', e);
+
+            vnode.context.$emit('drag', e);
+            if (binding.value.onDrag) {
+                binding.value.onDrag(e);
+            }
         };
 
         const handleDragEnd = (e) => {
             e.target.classList.remove('dragging', 'drag-over', 'drag-enter');
-            vnode.context.$emit('drag-end');
+
+            vnode.context.$emit('drag-end', e);
+            if (binding.value.onDragEnd) {
+                binding.value.onDragEnd(e);
+            }
         };
 
         const handleDrop = (e) => {
-            console.log("handleDrop-directive", e);
+            console.log('handleDrop-directive', e);
             e.preventDefault();
             if (e.stopPropagation) {
                 // stops the browser from redirecting.
@@ -52,7 +79,10 @@ Vue.directive('dnd', {
             }
 
             // Don't do anything if dropping the same column we're dragging.
-            vnode.context.$emit('drop');
+            vnode.context.$emit('drop', e);
+            if (binding.value.onDrop) {
+                binding.value.onDrop(e);
+            }
 
             return false;
         };
@@ -66,9 +96,6 @@ Vue.directive('dnd', {
         el.addEventListener('dragleave', handleDragLeave, false);
         el.addEventListener('dragend', handleDragEnd, false);
         el.addEventListener('drop', handleDrop, false);
-        el.addEventListener('click', () => {
-            vnode.context.$emit('click');
-        }, false);
     },
     unbind: function (el) {
         // shut er' down

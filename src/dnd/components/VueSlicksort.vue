@@ -1,36 +1,53 @@
-// See https://github.com/SortableJS/Vue.Draggable
+// See https://www.npmjs.com/package/vue-slicksort
 
 <template>
 <div>
-  <h2>VueDraggable directive (using SortableJS)</h2>
-  <h3>1. Support for touch devices</h3>
-  <h3>2. Supports drag handles and selectable text</h3>
+  <h2>VueSlicsort directive (using SortableJS)</h2>
   <h3>3. Support drag and drop between different lists</h3>
-  <h3>4. Cancellation support</h3>
   <h3>5. Sync HTML with model</h3>
   <h3>6. Can work with Vuex</h3>
   <h3>7. Can work with Vuetify/VueMaterial/Bootstrap/...</h3>
   <h3>8. Compatible with Vue.js 2.0 transition-group/</h3>
 
-  <draggable v-model="tasks"  :options="{draggable:'.task'}">
+  <SortableList lockAxis="y" v-model="tasks">
     <transition-group name="task">
-      <div v-for="task in tasks" :key="task.id" class="task">
-          <input type="checkbox" v-model="task.completed">
-          <strong>{{task.title}}</strong>
-          <button @click="removeTask(task)">Remove</button>
-      </div>
+      <SortableItem v-for="(task, index) in tasks" :key="task.id"
+        :index="index" :item="task" :itemClass="'task'" @remove="removeTask(task)"/>
     </transition-group>
-  </draggable>
+  </SortableList>
+
   <button @click="addTask">Add</button>
 </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
+import {ContainerMixin, ElementMixin} from 'vue-slicksort';
+
+const SortableList = {
+  mixins: [ContainerMixin],
+  template: `
+    <div class="list">
+      <slot />
+    </div>
+  `,
+};
+
+const SortableItem = {
+  mixins: [ElementMixin],
+  props: ['item', 'itemClass'],
+  template: `
+    <div :class='itemClass'>
+      <input type="checkbox" v-model="item.completed">
+      <strong>{{item.title}}</strong>
+      <button @click="$emit('remove')">Remove</button>
+    </div>
+  `,
+};
 
 export default {
   components: {
-    draggable
+    SortableItem,
+    SortableList,
   },
   data() {
     return {
@@ -68,11 +85,12 @@ export default {
   padding: 4px;
   margin-top: 4px;
   border: solid 1px;
-  transition: all 1s;
 }
 
 .task-enter,
 .task-leave-active {
+  transition-property: opacity;
+  transition-duration: 1s;
   opacity: 0;
 }
 </style>
