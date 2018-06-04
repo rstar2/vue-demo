@@ -17,6 +17,7 @@
     "signature_pad": "^2.3.2",
     "style-loader": "^0.21.0",
     "vue": "^2.5.11",
+    "vue-motion": "^0.2.2",
     "vue-rx": "^5.0.0",
     "vue-slicksort": "^0.1.8",
     "vue-style-loader": "^4.1.0",

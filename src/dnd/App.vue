@@ -3,11 +3,11 @@
     <h1 class="centered">Drag And Drop exampes</h1>
     <hr>
 
-    <!-- <dnd></dnd>
+    <dnd></dnd>
     <hr>
 
     <vuedragable></vuedragable>
-    <hr> -->
+    <hr>
 
     <vueslicksort></vueslicksort>
   </div>

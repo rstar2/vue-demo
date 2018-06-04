@@ -18,10 +18,11 @@
     </div>
 
     <!-- Extract the passed prom the parent BaseLayout component scope properties. Here we use ES6 destructuring  -->
-    <div slot="footer-ex" slot-scope="{result, choices}">
+    <!-- If usete 'template'  tag then "slot-scope" is the same as "scope"  -->
+    <template slot="footer-ex" slot-scope="{result, choices}">
       <p v-if="!result.isFinished">Result: {{result.value}}</p>
       <p v-for="(choice, index) in choices" :key="index">{{choice}}</p>
-    </div>
+    </template>
   </BaseLayout>
 </template>
 
