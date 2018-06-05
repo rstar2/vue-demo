@@ -1,21 +1,30 @@
 <template>
   <div id="app">
-    <button :disabled="disabled">Dismiss</button>
-    <app-signature-pad></app-signature-pad>
+    <SignaturePad @onBegin="onBegin" @onEnd="onEnd($event)"></SignaturePad>
   </div>
 </template>
 
 <script>
-import AppSignaturePad from "./components/SignaturePad.vue";
+import SignaturePad from "./components/SignaturePad.vue";
 
 export default {
   data() {
     return {
-      disabled: true
     };
   },
   components: {
-    "app-signature-pad": AppSignaturePad
+    SignaturePad
+  },
+  methods: {
+    onBegin(event) {
+      console.log('onBegin');
+      console.dir(event);
+    },
+    onEnd(event) {
+      console.log('onEnd');
+      console.dir( event);
+    }
+
   }
 };
 </script>
