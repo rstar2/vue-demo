@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <SignaturePad @onBegin="onBegin" @onEnd="onEnd($event)"></SignaturePad>
+    <SignaturePad ref="signaturePad" @onBegin="onBegin" @onEnd="onEnd($event)"></SignaturePad>
+    <div>
+      <button @click="clear">Clear</button>
+      <button @click="save">Save</button>
+    </div>
   </div>
 </template>
 
@@ -9,22 +13,28 @@ import SignaturePad from "./components/SignaturePad.vue";
 
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     SignaturePad
   },
   methods: {
     onBegin(event) {
-      console.log('onBegin');
+      console.log("onBegin");
       console.dir(event);
     },
     onEnd(event) {
-      console.log('onEnd');
-      console.dir( event);
+      console.log("onEnd");
+      console.dir(event);
+    },
+    clear() {
+      this.$refs.signaturePad.clear();
+    },
+    save() {
+      console.log("IsEmpty - ", this.$refs.signaturePad.isEmpty());
+      const url = this.$refs.signaturePad.toDataURL();
+      console.log("Data", url);
     }
-
   }
 };
 </script>
@@ -53,5 +63,4 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div :style="computedStyle">
-    	<canvas style="width:100%; height:100%" ref="canvas"></canvas>
+    	<canvas ref="canvas" style="width:100%; height:100%"></canvas>
   </div>
 </template>
 
@@ -17,24 +17,19 @@ const DEFAULT_OPTIONS = {
   velocityFilterWeight: 0.7
 };
 
-const TRANSPARENT_PNG = {
-  src:
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-  x: 0,
-  y: 0
-};
-
 function resizeCanvas(signaturePad, canvas) {
-  const data = signaturePad.toData();
+  const data = signaturePad.isEmpty() ? null : signaturePad.toData();
 
-  var ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
   canvas.width = canvas.offsetWidth * ratio;
   canvas.height = canvas.offsetHeight * ratio;
   canvas.getContext("2d").scale(ratio, ratio);
-  // signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+  signaturePad.clear(); // otherwise isEmpty() might return incorrect value
 
-  //signatureData = TRANSPARENT_PNG;
-  // signaturePad.fromData(data);
+  // put back the data
+  if (data) {
+    signaturePad.fromDataURL(data);
+  }
 }
 
 export default {
