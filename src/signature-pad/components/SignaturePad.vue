@@ -93,6 +93,11 @@ export default {
     window.addEventListener("resize", _resizeCanvas);
     _resizeCanvas();
   },
+  // Right before the component is destroyed,
+  // also destroy the SignaturePad - at least unbind the event listeners.
+  beforeDestroy: function() {
+    this.signaturePad.off();
+  },
 
   methods: {
     isEmpty() {
