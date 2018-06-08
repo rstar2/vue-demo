@@ -1,3 +1,6 @@
 .vscode
 node_modules
-dist
+
+# If needed to support GitHub pages then the /dist folder has to be committed
+# dist
+dist/*.map
