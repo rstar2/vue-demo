@@ -1,4 +1,4 @@
-# vue-vuerx
+# Vue simple playground demos
 
 > A Vue.js project
 
