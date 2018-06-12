@@ -14,7 +14,7 @@ module.exports = {
   entry: entries,
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: 'dist/',
+    publicPath: '/dist/',
     filename: 'build.[name].js',
   },
   module: {
@@ -62,6 +62,7 @@ module.exports = {
   },
   devServer: {
     // webpack output is served from /dist/
+    publicPath: '/dist/',
     // Content not from webpack is served from ./public, ./assets
     contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'assets')],
     historyApiFallback: true,
