@@ -96,23 +96,15 @@ if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: '"production"'
-            }
-        }),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
             compress: {
-                warnings: false
-            },
-            uglifyOptions: {
-                // comparisons: false,
-                typeofs: false,
+                warnings: false,
+                comparisons: false,  // this is needed otherwise mapboxgl.js is not working with devtool = '#source-map'
             }
         }),
         new webpack.LoaderOptionsPlugin({
-            minimize: true
+            minimize: true,
         }),
     ]);
 }

@@ -5,7 +5,7 @@
 
 <script>
 // import "./mapbox-gl.css";
-import mapboxgl from "mapbox-gl/dist/mapbox-gl";
+import mapboxgl from 'mapbox-gl';
 
 export default {
   mounted() {
