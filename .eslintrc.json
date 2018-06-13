@@ -21,5 +21,8 @@
       "space-unary-ops"  :"error",
       "no-console"       : "off",
       "no-var"           : "warn"
+  },
+  "globals": {
+    "process": true
   }
 }

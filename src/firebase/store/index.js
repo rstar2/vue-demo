@@ -12,15 +12,14 @@ import Balls from './balls';
 
 // Initialize Firebase
 const config = {
-    apiKey: 'AIzaSyCu2x0---zlQC1tnWAMwQ3G-zCDIktH0Bk',
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: 'amazeballs-dd1c9.firebaseapp.com',
     databaseURL: 'https://amazeballs-dd1c9.firebaseio.com',
     projectId: 'amazeballs-dd1c9',
     storageBucket: 'amazeballs-dd1c9.appspot.com',
-    messagingSenderId: '721278041483'
+    messagingSenderId: process.env.FIREBASE_SENDER_ID
 };
 firebase.initializeApp(config);
-
 
 firebase.auth().onAuthStateChanged((user) => {
     console.log('Logged in as:', user);
