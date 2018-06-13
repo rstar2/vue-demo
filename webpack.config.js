@@ -105,6 +105,10 @@ if (process.env.NODE_ENV === 'production') {
             sourceMap: true,
             compress: {
                 warnings: false
+            },
+            uglifyOptions: {
+                // comparisons: false,
+                typeofs: false,
             }
         }),
         new webpack.LoaderOptionsPlugin({
