@@ -43,6 +43,7 @@ pages:
   script:
     - npm run build
     - mv dist public
+    # - cp -r dist/* public
   artifacts:
     paths:
       - public

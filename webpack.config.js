@@ -3,8 +3,10 @@
 require('dotenv').config();
 
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // 'dotenv' wrapper - load the .env
 const Dotenv = require('dotenv-webpack');
@@ -21,7 +23,7 @@ module.exports = {
     entry: entries,
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist/',
+        // publicPath: '/dist/',
         filename: 'build.[name].js',
     },
     module: {
@@ -69,9 +71,10 @@ module.exports = {
     },
     devServer: {
         // webpack output is served from /dist/
-        publicPath: '/dist/',
+        // publicPath: '/dist/',
         // Content not from webpack is served from ./public, ./assets
-        contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'assets')],
+        // contentBase: [path.join(__dirname, 'public'), path.join(__dirname, 'assets')],
+
         historyApiFallback: true,
         noInfo: true,
         overlay: true,
@@ -91,6 +94,25 @@ module.exports = {
         }),
     ],
 };
+
+module.exports.plugins = (module.exports.plugins || []).concat(
+    Object.keys(entries).map(function (id) {
+
+        const mainFile = entries[id];
+        let indexHtml = path.resolve(mainFile, '..', 'index.html');
+        if (!fs.existsSync(indexHtml)) {
+            indexHtml = './src/index.html';
+        }
+
+        return new HtmlWebpackPlugin({
+            chunks: ['common', id],
+            filename: id + '.html',
+            template: indexHtml,
+            title: entries[id]
+        });
+    })
+);
+
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map';
