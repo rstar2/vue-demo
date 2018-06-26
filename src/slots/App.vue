@@ -7,7 +7,7 @@
 
     <!-- This is the dafault slot,
       e.g. same as <template slot="default"></template>
-      or just <template slot=></template> -->
+      or just <template slot></template> -->
     <p>A paragraph for the main content.</p>
     <p>And another one.</p>
 
