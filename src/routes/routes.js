@@ -1,7 +1,10 @@
 import { Simple, SimpleOther } from './pages/simple';
 import { User } from './pages/params';
+import { Profile } from './pages/props';
 import { Nested, NestedChildA, NestedChildB } from './pages/nested';
 import { NamedViews, MainChild, SideBarChild } from './pages/named';
+import DataFetchAfter from './pages/data-fetch/AfterNavigation.vue';
+import DataFetchBefore from './pages/data-fetch/BeforeNavigation.vue';
 
 const NotFoundComponent = {
     template: '<div>404 Page Not Found</div>',
@@ -16,6 +19,7 @@ const routes = [
         path: '',
         redirect: '/simple'
     },
+
     {
         // dynamic params/segments start with a colon
         path: '/simple/',
@@ -27,12 +31,27 @@ const routes = [
         alias: '/superFunkyName',
         component: SimpleOther
     },
+
     {
         // dynamic params/segments start with a colon
         path: '/user/:id?',
         name: 'user',
         component: User
     },
+
+    {
+        path: '/profile/:id?',
+        component: Profile,
+        // pass the params as props
+        props: true,
+    },
+    {
+        path: '/admin',
+        component: Profile,
+        // fixed props - pass as object
+        props: { id : 'Admin'},
+    },
+
     {
         path: '/nested',
         component: Nested,
@@ -55,6 +74,7 @@ const routes = [
             }
         ]
     },
+
     {
         path: '/named',
         component: NamedViews,
@@ -68,6 +88,22 @@ const routes = [
             }
         ]
     },
+
+    {
+        path: '/lazy',
+        component: () => import ('./pages/lazy/Lazy.vue')
+    },
+
+    {
+        path: '/data-fetch/after/:id',
+        component: DataFetchAfter
+    },
+
+    {
+        path: '/data-fetch/before/:id',
+        component: DataFetchBefore
+    },
+
     // Fallback - show this component if previously the route is not matched
     { path: '*', component: NotFoundComponent }
 ];

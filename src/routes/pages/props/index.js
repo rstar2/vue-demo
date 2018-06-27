@@ -1,16 +1,18 @@
-export const User = {
+export const Profile = {
+    // don't couple to the this.$route
+    // e.g. no need to use this.$route.params.id but instead pass the id as prop
+    props: ['id'],
+
     template: `
         <div>
-          <h2>ID - {{$route.params.id}}</h2>
+          <h2>ID - {{id}}</h2>
 
           <h3>Hello {{username}}</h3>
         </div>
     `,
     computed: {
-        // By injecting the router, we get access to it as this.$router
-        // as well as the current route as this.$route inside of any component:
         username() {
-            return this.$route.params.id ? this.$route.params.id.toUpperCase() : 'GUEST';
+            return this.id ? this.id.toUpperCase() : 'GUEST';
         },
     }
 };
