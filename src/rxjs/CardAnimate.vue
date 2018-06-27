@@ -144,9 +144,9 @@ body {
   padding: 0;
 }
 
-html {
-  // background: linear-gradient(to bottom, #dbe6ed, #cfdde5);
-}
+// html {
+//   background: linear-gradient(to bottom, #dbe6ed, #cfdde5);
+// }
 
 *,
 *:before,

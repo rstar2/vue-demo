@@ -30,6 +30,7 @@
     "vue-slicksort": "^0.1.8",
     "vue-style-loader": "^4.1.0",
     "vue-tippy": "^2.0.12",
+    "vue2-frappe": "^1.0.21",
     "vuedraggable": "^2.16.0"
   },
   "browserslist": [
