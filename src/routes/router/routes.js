@@ -1,10 +1,10 @@
-import { Simple, SimpleOther } from './pages/simple';
-import { User } from './pages/params';
-import { Profile } from './pages/props';
-import { Nested, NestedChildA, NestedChildB } from './pages/nested';
-import { NamedViews, MainChild, SideBarChild } from './pages/named';
-import DataFetchAfter from './pages/data-fetch/AfterNavigation.vue';
-import DataFetchBefore from './pages/data-fetch/BeforeNavigation.vue';
+import { Simple, SimpleOther } from '../pages/simple';
+import { User } from '../pages/params';
+import { Profile } from '../pages/props';
+import { Nested, NestedChildA, NestedChildB } from '../pages/nested';
+import { NamedViews, MainChild, SideBarChild } from '../pages/named';
+import DataFetchAfter from '../pages/data-fetch/AfterNavigation.vue';
+import DataFetchBefore from '../pages/data-fetch/BeforeNavigation.vue';
 
 const NotFoundComponent = {
     template: '<div>404 Page Not Found</div>',
@@ -91,7 +91,7 @@ const routes = [
 
     {
         path: '/lazy',
-        component: () => import ('./pages/lazy/Lazy.vue')
+        component: () => import ('../pages/lazy/Lazy.vue')
     },
 
     {
