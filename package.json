@@ -16,6 +16,7 @@
     "dotenv-webpack": "^1.5.7",
     "firebase": "^5.0.4",
     "mapbox-gl": "^0.45.0",
+    "material-design-icons-iconfont": "^3.0.3",
     "moment": "^2.22.2",
     "popper.js": "^1.14.3",
     "rxjs": "^5.5.10",
@@ -32,6 +33,7 @@
     "vue-tippy": "^2.0.12",
     "vue2-frappe": "^1.0.21",
     "vuedraggable": "^2.16.0",
+    "vuetify": "^1.1.1",
     "vuex": "^3.0.1"
   },
   "browserslist": [

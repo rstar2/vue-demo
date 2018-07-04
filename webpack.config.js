@@ -61,6 +61,14 @@ module.exports = {
                     outputPath: 'assets/',
                 }
             },
+            {
+                test: /\.(eot|woff|ttf|svg|woff2)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]?[hash]',
+                    outputPath: 'assets/',
+                }
+            },
         ]
     },
     resolve: {
