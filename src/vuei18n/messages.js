@@ -5,6 +5,7 @@ const messages = {
             body: 'body {msg}',
             bodyList: 'body {0}',
         },
+        text: 'text {count}',
     },
     bg: {
         dialog: {
@@ -12,6 +13,7 @@ const messages = {
             body: 'съдържание {msg}',
             bodyList: 'съдържание {0}',
         },
+        text: 'текст {count}',
     }
 };
 

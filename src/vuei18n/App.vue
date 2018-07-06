@@ -1,14 +1,16 @@
 <template>
   <v-app>
     <v-container grid-list-xl>
-      <v-layout wrap align-top>
-        <v-flex xs12 sm6>
-            <v-select :items="locales" v-model="locale"></v-select>
-        </v-flex>
-        <h1>{{ $t("dialog.title") }}</h1>
-        <h3>{{ $t("dialog.body", {msg: 'hello'}) }}</h3>
-        <h3>{{ $t("dialog.bodyList", ['hello']) }}</h3>
-    </v-layout>
+      <v-layout align-center>
+        <!-- <v-flex xs12 sm6 d-flex> -->
+            <v-select xs12 sm6 :items="locales" v-model="locale"></v-select>
+        <!-- </v-flex> -->
+        <h1 xs12 sm6>{{ $t("dialog.title") }}</h1>
+        <h3 xs12 sm6>{{ $t("dialog.body", {msg: 'hello'}) }}</h3>
+        <h3 xs12 sm6>{{ $t("dialog.bodyList", ['hello']) }}</h3>
+
+        <h3> {{ text }}</h3>
+      </v-layout>
     </v-container>
   </v-app>
 </template>
@@ -46,11 +48,19 @@ export default {
         this.$i18n.locale = newValue;
       }
     }
-
-
-    // TODO: localize from the Compoenent programatically
   },
 
-
+  // localize from the Compoenent programatically
+  data() {
+    return {
+      text: '',
+    };
+  },
+  mounted() {
+    let count = 0;
+    setInterval(() => {
+      this.text = this.$t('text', { count: ++count }) ;
+    },1000);
+  },
 };
 </script>

@@ -1,71 +1,47 @@
 <template>
   <div id="app">
-    <h1>{{ count }}</h1>
-    <h1>Is even :{{ isEven }}</h1>
-    <button @click="add" >Add</button>
-    <button @click="remove" >Remove</button>
+    <h1>{{ answer }}</h1>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import Vue from "vue";
 
 export default {
   data() {
     // local component's data/state
     return {
-      min: 0,
-      max: 10
+      answer: 0
     };
   },
-  computed: {
-    // local computed state
-    // ...,
+  mounted() {
+    const api = "https://yesno.wtf/api";
 
-    ...mapGetters([
-      // Mounts the "count" getter to the scope of your component.
-      "count"
-    ]),
+    // Usage:
+    // all are the same instances in fact (Vue.axios === this.axios === this.$http)
+    // 1. globally
+    Vue.axios
+      .get(api)
+      .then(response => response.data)
+      .then(data => {
+        this.answer = `One ${data.answer}`;
+      });
 
-    // or if we want to change the name how it's used in the internal's scope
-    ...mapGetters({
-      countNewName: "count"
-    }),
+    // 2. from single file component
+    setTimeout(() => {
+      this.axios.get(api)
+        .then(response => response.data)
+        .then(data => {
+          this.answer = `Two ${data.answer}`;
+        });
+    }, 2000);
 
-    // the same - direct accessing the store's state property through it's getter
-    isEven() {
-      return this.$store.getters.isEven;
-    },
-
-    // invoke the getter function
-    isEqual(val) {
-      return this.$store.getters.isEqual(val);
-    }
-  },
-
-  methods: {
-    // call actions (which can be synchronous or asynchronous)
-    // better is to always use them no matter if they internally just call the mutations
-    add() {
-      this.$store.dispatch("add")
-        .then(result => console.log(result));
-    },
-    remove() {
-      this.$store.dispatch("changeBy", { val: -1 })
-        .then(result => console.log(result));
-    },
-
-    // Directly call the mutations (which are synchtonous and don't return value -just update the store's state)
-    addCommit() {
-      this.$store.commit("changeBy", { val: 1 });
-    },
-    removeCommit() {
-      this.$store.commit("changeBy", { val: -1 });
-    },
-
-    // could use mapMutations also to directly map mutations' names to methods names'
-    // so now there's a 'changeBy(payload)' method that internally will call 'this.$store.commit("changeBy", payload);'
-    ...mapMutations(["changeBy"])
+    setTimeout(() => {
+      this.$http.get(api)
+        .then(({ data }) => {
+          this.answer = `Three ${data.answer}`;
+        });
+    }, 5000);
   }
 };
 </script>
