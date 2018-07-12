@@ -33,8 +33,16 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                        //'vue-style-loader',
                         'css-loader'
+                    ],
+                })
+            },
+            {
+                test: /\.s[a|c]ss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        'sass-loader'
                     ],
                 })
             },
@@ -44,6 +52,8 @@ module.exports = {
                 options: {
                     loaders: {
                         'less': 'vue-style-loader!css-loader!less-loader',
+                        'scss': 'vue-style-loader!css-loader!sass-loader',
+                        // 'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
                     }
                     // other vue-loader options go here
                 },
@@ -76,6 +86,11 @@ module.exports = {
             'vue$': 'vue/dist/vue.esm.js'
         },
         extensions: ['*', '.js', '.vue', '.json'],
+    },
+    resolveLoader: {
+        alias: {
+            'scss-loader': 'sass-loader',
+        },
     },
     devServer: {
         // webpack output is served from /dist/

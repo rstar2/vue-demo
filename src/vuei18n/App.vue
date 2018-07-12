@@ -1,15 +1,22 @@
 <template>
   <v-app>
-    <v-container grid-list-xl>
-      <v-layout align-center>
-        <!-- <v-flex xs12 sm6 d-flex> -->
-            <v-select xs12 sm6 :items="locales" v-model="locale"></v-select>
-        <!-- </v-flex> -->
-        <h1 xs12 sm6>{{ $t("dialog.title") }}</h1>
-        <h3 xs12 sm6>{{ $t("dialog.body", {msg: 'hello'}) }}</h3>
-        <h3 xs12 sm6>{{ $t("dialog.bodyList", ['hello']) }}</h3>
-
-        <h3> {{ text }}</h3>
+    <v-container fluid >
+      <v-layout align-center row wrap>
+        <v-flex xs12>
+            <v-select :items="locales" v-model="locale"></v-select>
+        </v-flex>
+        <v-flex xs12 sm3>
+          <h1>{{ $t("dialog.title") }}</h1>
+        </v-flex>
+        <v-flex xs12 sm3>
+          <h3>1 - {{ $t("dialog.body", {msg: 'hello'}) }}</h3>
+        </v-flex>
+        <v-flex xs12 sm3>
+          <h3>2 -{{ $t("dialog.bodyList", ['hello']) }}</h3>
+        </v-flex>
+        <v-flex xs12 sm3>
+          <h3> {{ text }}</h3>
+        </v-flex>
       </v-layout>
     </v-container>
   </v-app>
