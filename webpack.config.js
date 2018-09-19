@@ -38,15 +38,6 @@ module.exports = {
                 })
             },
             {
-                test: /\.s[a|c]ss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        'sass-loader'
-                    ],
-                })
-            },
-            {
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: {

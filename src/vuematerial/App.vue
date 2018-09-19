@@ -94,6 +94,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+  @media screen and (max-width: 991px) {
+    .alert{
+      width: auto !important;
+      margin: 0 10px;
+
+      &.left {
+        left: 0 !important;
+      }
+      &.right {
+        right: 0 !important;
+      }
+      &.center{
+        margin: 0 10px !important;
+      }
+    }
+  }
+
   @import "~vue-material/src/components/MdAnimation/variables";
   @import "~vue-material/src/theme/engine";
 

@@ -17,8 +17,11 @@ Vue.use(VueMaterial);
 // Vue.use(MdContent);
 // Vue.use(MdTabs);
 
-// in order to load the CSS from a URL it's needed to loaded from a custom local CSS
+// in order to load the CSS from a URL it's needed to be loaded from a custom local CSS:
+// so this will not work
 //import url('//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons');
+// but when put in './styles.css'
+// and imported with @import url('//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'); 'it will
 import './styles.css';
 
 import App from './App.vue';
