@@ -19,7 +19,7 @@ install:
   only:
     - master
   script:
-    - npm install
+    - npm install --dev
   artifacts:
     paths:
       - node_modules
