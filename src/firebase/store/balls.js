@@ -10,23 +10,26 @@ export default class Balls {
         // in the underlying firestore collection changes
         // It will get passed an array of references to
         // the documents that match your query
-        this._ballsCollection.onSnapshot((ballsRef) => {
-            const balls = [];
-            ballsRef.forEach((doc) => {
-                const ball = doc.data();
-                ball.id = doc.id;
-                balls.push(ball);
+        this._ballsCollection
+            .orderBy('createdOn', 'desc')
+            .limit(5)
+            .onSnapshot((ballsRef) => {
+                const balls = [];
+                ballsRef.forEach((doc) => {
+                    const ball = doc.data();
+                    ball.id = doc.id;
+                    balls.push(ball);
+                });
+
+                // immutable - change entirely - will not work with current design of the store
+                // as it creates a new store { balls: xxxx } object,
+                // so changing the 'xxx' (in this case the this._balls) will not be caught by VueJS reactivity
+                //this._balls = balls;
+
+                // mutate
+                this._balls.splice(0);
+                this._balls.push(...balls);
             });
-
-            // immutable - change entirely - will not work with current design of the store
-            // as it creates a new store { balls: xxxx } object,
-            // so changing the 'xxx' (in this case the this._balls) will not be caught by VueJS reactivity
-            //this._balls = balls;
-
-            // mutate
-            this._balls.splice(0);
-            this._balls.push(...balls);
-        });
     }
 
     get balls() {
