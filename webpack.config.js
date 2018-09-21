@@ -8,6 +8,13 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// use the updated plugin because:
+// webpack < v4.0.0 currently contains v0.4.6 of this plugin under webpack.optimize.UglifyJsPlugin as an alias
+// but it cannot minify ES6 code
+// 1. One solution is to explicitly pass all used npm modules through the 'babel-loader' before - but this is ugly
+// 2. Second is to use the updated version of the UglifyJsPlugin plugin that support ES6 minification
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 // 'dotenv' wrapper - load the .env
 const Dotenv = require('dotenv-webpack');
 
@@ -132,15 +139,22 @@ if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-        new webpack.optimize.UglifyJsPlugin({
+        // this old version of the plugin cannot minify ES6
+        // new webpack.optimize.UglifyJsPlugin({
+        //     sourceMap: true,
+        //     compress: {
+        //         warnings: false,
+        //         comparisons: false,  // this is needed otherwise mapboxgl.js is not working with devtool = '#source-map'
+        //     }
+        // }),
+        new UglifyJsPlugin({
             sourceMap: true,
-            compress: {
-                warnings: false,
-                comparisons: false,  // this is needed otherwise mapboxgl.js is not working with devtool = '#source-map'
-            }
+
         }),
+
         new webpack.LoaderOptionsPlugin({
             minimize: true,
         }),
     ]);
+
 }
