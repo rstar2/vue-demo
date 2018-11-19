@@ -1,24 +1,31 @@
 <template>
   <div class="map">
-    <svg v-if="width && height" :viewBox="vbox">
-      <g v-for="(tile, index) in tiles" :key="index">
-          <image
-            :key="getTileImageKey(tile)"
-            :href="getTileHref(tile)"
-            :x="(tile.x + tiles.translate[0]) * tiles.scale"
-            :y="(tile.y + tiles.translate[1]) * tiles.scale"
-            :width="tiles.scale"
-            :height="tiles.scale"
-            class="map__tile"
-          />
-      </g>
-    </svg>
+    <template v-if="width && height">
+      <svg :viewBox="vbox">
+        <g v-for="(tile, index) in tiles" :key="index">
+            <image
+              :key="getTileImageKey(tile)"
+              :href="getTileHref(tile)"
+              :x="(tile.x + tiles.translate[0]) * tiles.scale"
+              :y="(tile.y + tiles.translate[1]) * tiles.scale"
+              :width="tiles.scale"
+              :height="tiles.scale"
+              class="map__tile"
+            />
+        </g>
+      </svg>
+      <div class="map__controls">
+          <button class="map__button" :disabled="zoom >= MAX_ZOOM" @click="zoomIn"
+          >+</button>
+          <button class="map__button" :disabled="zoom <= MIN_ZOOM" @click="zoomOut"
+          >-</button>
+        </div>
+      <div v-if="width && height" class="map__copyright">
+        ©&nbsp; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap&nbsp;</a>
+      </div>
+    </template>
     <div v-else>
       Empty map
-    </div>
-
-    <div v-if="width && height" class="map__copyright">
-      ©&nbsp; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap&nbsp;</a>
     </div>
   </div>
 </template>
@@ -29,21 +36,34 @@
 import * as d3Geo from "d3-geo";
 import * as d3Tile from "d3-tile";
 
+const MIN_ZOOM = 10;
+const MAX_ZOOM = 27;
+
 export default {
   props: {
     center: {
       type: Array,
-      default: () => [33.561041, -7.584838]
+      default: [33.561041, -7.584838]
     },
-    scale: {
+    initialZoom: {
       type: [Number, String],
-      default: 1 << 20
+      default: 20
     }
   },
   data() {
     return {
       width: 0,
-      height: 0
+      height: 0,
+
+      translateX: 0,
+      translateY: 0,
+
+      touchStarted: false,
+      touchLastX: 0,
+      touchLastY: 0,
+
+      zoom: +this.initialZoom,
+      scale: 1 << +this.initialZoom
     };
   },
   computed: {
@@ -53,7 +73,7 @@ export default {
     projection() {
       return d3Geo
         .geoMercator()
-        .scale(+this.scale / (2 * Math.PI))
+        .scale(this.scale / (2 * Math.PI))
         .translate([this.width / 2, this.height / 2])
         .center(this.center);
     },
@@ -61,7 +81,7 @@ export default {
       return d3Tile
         .tile()
         .size([this.width, this.height])
-        .scale(+this.scale)
+        .scale(this.scale)
         .translate(this.projection([0, 0]))();
     }
   },
@@ -70,13 +90,25 @@ export default {
 
     this.width = rect.width;
     this.height = rect.height;
+
+    this.translateX = this.width / 2;
+    this.translateY = this.height / 2;
   },
   methods: {
     getTileImageKey(tile) {
       return `${tile.x}_${tile.y}_${tile.z}`;
     },
     getTileHref(tile) {
-      return `https://a.tile.openstreetmap.org/${tile.z}/${tile.x}/${tile.y}.png`;
+      return `https://a.tile.openstreetmap.org/${tile.z}/${tile.x}/${
+        tile.y
+      }.png`;
+    },
+
+    zoomIn() {
+      this.zoom = Math.min(this.zoom + 1, MAX_ZOOM);
+    },
+    zoomOut() {
+      this.zoom = Math.max(this.zoom - 1, MIN_ZOOM);
     }
   }
 };
@@ -92,7 +124,39 @@ body {
 .map {
   width: 100%;
   height: 100%;
+  position: relative;
 
+  &__controls {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 56px;
+  }
+  &__button {
+    border: 0;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 50%;
+    font-size: 18px;
+    background-color: #ffffff;
+    color: #343434;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    &:hover,
+    &:focus {
+      background-color: #eeeeee;
+    }
+    &:disabled {
+      background-color: rgba(#eeeeee, 0.4);
+    }
+  }
+  &__tile {
+    pointer-events: none;
+  }
   &__copyright {
     position: absolute;
     bottom: 8px;
