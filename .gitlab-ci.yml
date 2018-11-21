@@ -29,6 +29,8 @@ test:
   only:
     - master
   script:
+    # Currently there's even no 'npm test' script, so this step could be skipped
+    # but let it be here for reference
     - npm test
 
 # 'pages' is a special job that is used to upload static content to GitLab
