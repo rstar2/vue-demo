@@ -3,16 +3,26 @@
     <g v-for="(value, index) in sortedValues" :key="index">
       <circle :cx="cx" :cy="cy" :r="radius" fill="transparent"
         :stroke="color(index)" :stroke-width="strokeWidth"
-        :stroke-dasharray="circumference"
+        :stroke-dasharray="dash"
         :stroke-dashoffset="offset(value, circumference)"
         :transform="transform(index)">
       </circle>
-      <text></text>
+      <!-- with the  "text-anchor" presentation attribute we can fix the off-centering,
+      depending on the font and font size
+      -->
+      <text v-if="segmentBigEnough(value)" text-anchor="middle" dy="3px"
+        :x="chartData[index].textX" :y="chartData[index].textY">
+        {{ labelPercentage(value) }}
+      </text>
     </g>
   </svg>
 </template>
 <script>
 const colors = ["#6495ED", "goldenrod", "#cd5c5c", "thistle", "lightgray"];
+
+const degreesToRadians = angle => {
+  return angle * (Math.PI / 180);
+};
 
 export default {
   props: {
@@ -28,12 +38,8 @@ export default {
       radius: 60,
       strokeWidth: 30,
 
-      sortedValues: [],
-
-      chartData: [],
-      // because starting point for SVG circles begin at 3 o’clock,
-      // so make it at the 12 o’clock position, or -90 degrees
-      angleOffset: -90
+      // sortedValues: [],
+      chartData: []
     };
   },
   computed: {
@@ -41,21 +47,17 @@ export default {
     circumference() {
       return 2 * Math.PI * this.radius;
     },
+    dash() {
+      // substruct 2 in order to make this little gap between segments
+      return this.circumference - 2;
+    },
 
     // the total sum of all values - from it, percentages for each single value can be calculated
     total() {
       return this.sortedValues.reduce((acc, val) => acc + val);
     },
-
-    calcChartData() {
-      this.sortedValues.forEach((dataVal, index) => {
-        const data = {
-          degrees: this.angleOffset
-        };
-        this.chartData.push(data);
-        this.angleOffset =
-          this.dataPercentage(dataVal) * 360 + this.angleOffset;
-      });
+    sortedValues() {
+      return this.initialValues.sort((a, b) => b - a);
     }
   },
   methods: {
@@ -75,13 +77,54 @@ export default {
       // If we don’t supply cx and cy coordinates, then rotation will be around
       // the entire SVG coordinate system.
       return `rotate(${this.chartData[index].degrees}, ${this.cx}, ${this.cy})`;
+    },
+    labelPercentage(value) {
+      return `${Math.round(this.valuePercentage(value) * 100)}%`;
+    },
+    segmentBigEnough(value) {
+      // check if the segment is gig enough in order to add text inside it
+      return Math.round(this.valuePercentage(value) * 100) > 5;
     }
   },
-  created() {
-    // TODO: allow values to be changed - this should be computed prop
-    this.sortedValues = this.initialValues.sort((a, b) => b - a);
+  watch: {
+    sortedValues: {
+      handler() {
+        // because starting point for SVG circles begin at 3 o’clock,
+        // so make it at the 12 o’clock position, or -90 degrees
+        let angleOffset = -90;
 
-    this.calcChartData();
+        // for labels
+        // x = r cos(t) + a
+        // y = r sin(t) + b
+        // where r is the radius, t is the angle (IN RADIANS),
+        // and a and b are the x and y center point offsets.
+        // radians = degrees * (π / 180)
+
+        const chartData = [];
+        this.sortedValues.forEach(value => {
+          // we calculate the angle of our segment by multiplying the ratio of our data value by 360;
+          // however, we actually want half of this because our text labels are in the middle of the segment rather than the end
+          const angle = (this.valuePercentage(value) * 360) / 2 + angleOffset;
+          const radians = degreesToRadians(angle);
+
+          const data = {
+            degrees: angleOffset,
+
+            // text coordinates
+            textX: this.radius * Math.cos(radians) + this.cx,
+            textY: this.radius * Math.sin(radians) + this.cy
+          };
+          chartData.push(data);
+
+          angleOffset += this.valuePercentage(value) * 360;
+        });
+        this.chartData = chartData;
+      },
+      immediate: true
+    }
   }
 };
+
+// TODO: Create animations with CSS or
+// with Greensock to create effects when the chart comes into view.
 </script>
