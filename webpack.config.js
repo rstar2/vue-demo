@@ -5,15 +5,13 @@ require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// use the updated plugin because:
-// webpack < v4.0.0 currently contains v0.4.6 of this plugin under webpack.optimize.UglifyJsPlugin as an alias
-// but it cannot minify ES6 code
-// 1. One solution is to explicitly pass all used npm modules through the 'babel-loader' before - but this is ugly
-// 2. Second is to use the updated version of the UglifyJsPlugin plugin that support ES6 minification
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 // 'dotenv' wrapper - load the .env
 const Dotenv = require('dotenv-webpack');
@@ -27,6 +25,7 @@ const entries = mainFiles.reduce((acc, mainFile) => {
 }, {});
 
 module.exports = {
+    mode: 'development',
     entry: entries,
     output: {
         path: path.resolve(__dirname, './dist'),
@@ -37,24 +36,39 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        'css-loader'
-                    ],
-                })
+                // use: ['style-loader', 'css-loader'],
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            // you can specify a publicPath here
+                            // by default it use publicPath in webpackOptions.output
+                            // publicPath: '../'
+                        }
+                    },
+                    // 'vue-style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'less-loader'
+                ]
+            },
+            {
+                test: /\.(sass|scss)$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: {
-                    loaders: {
-                        'less': 'vue-style-loader!css-loader!less-loader',
-                        'scss': 'vue-style-loader!css-loader!sass-loader',
-                        // 'sass': 'vue-style-loader!css-loader!sass-loader?indentedSyntax',
-                    }
-                    // other vue-loader options go here
-                },
             },
             {
                 test: /\.js$/,
@@ -85,11 +99,6 @@ module.exports = {
         },
         extensions: ['*', '.js', '.vue', '.json'],
     },
-    resolveLoader: {
-        alias: {
-            'scss-loader': 'sass-loader',
-        },
-    },
     devServer: {
         // webpack output is served from /dist/
         // publicPath: '/dist/',
@@ -103,9 +112,9 @@ module.exports = {
     performance: {
         hints: false,
     },
-    devtool: '#eval-source-map',
+    devtool: 'eval-source-map',
     plugins: [
-        new ExtractTextPlugin('build.[name].css'),
+        new CleanWebpackPlugin(['dist']),
 
         new Dotenv({
             // path: './some.other.env', // load this now instead of the ones in '.env'
@@ -113,6 +122,22 @@ module.exports = {
             systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
             // silent: true // hide any errors
         }),
+
+        new VueLoaderPlugin(),
+
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: 'build.[name].css',
+        }),
+
+        new CompressionPlugin({
+            test: /\.js$|\.css$|\.html$/,
+            algorithm: 'gzip',
+            filename: '[path].gz[query]',
+            // threshold: 10240,
+            minRatio: 0.8
+        })
     ],
 };
 
@@ -136,22 +161,10 @@ module.exports.plugins = (module.exports.plugins || []).concat(
 
 
 if (process.env.NODE_ENV === 'production') {
-    module.exports.devtool = '#source-map';
+    module.exports.mode = 'production';
+    module.exports.devtool = 'source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-        // this old version of the plugin cannot minify ES6
-        // new webpack.optimize.UglifyJsPlugin({
-        //     sourceMap: true,
-        //     compress: {
-        //         warnings: false,
-        //         comparisons: false,  // this is needed otherwise mapboxgl.js is not working with devtool = '#source-map'
-        //     }
-        // }),
-        new UglifyJsPlugin({
-            sourceMap: true,
-
-        }),
-
         new webpack.LoaderOptionsPlugin({
             minimize: true,
         }),
