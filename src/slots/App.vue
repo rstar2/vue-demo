@@ -12,7 +12,7 @@
     <p>And another one.</p>
 
     <!-- Could be used any HDML tag, not just <template> -->
-    <!-- IN thi scase the corresponding slot in the parent is replaced with the whole tag (DIV in this case) -->
+    <!-- In this case the corresponding slot in the parent is replaced with the whole tag (DIV in this case) -->
     <div slot="footer">
       <p>Here's some contact info</p>
     </div>
