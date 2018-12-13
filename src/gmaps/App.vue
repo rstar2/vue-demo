@@ -2,7 +2,7 @@
   <div id="app">
     <GoogleMap
       class="travel-map"
-      apiKey="AIzaSyB93baXanXOj5Q0u6fAleGg2NjuRMlB0OI"
+      :apiKey="apiKey"
       :mapSettings="mapSettings"
       :markers="markers"
       :lines="lines"
@@ -16,13 +16,19 @@
 import { mapSettings } from "./gmap_settings";
 import GoogleMap from "./components/GoogleMap";
 
+const apiKey = process.env.GMAPS_API_KEY;
+
 export default {
   components: {
     GoogleMap
   },
+  beforeCreate() {
+    // add to the Vue instance so that they are accessible in the template
+    this.mapSettings = mapSettings;
+    this.apiKey = apiKey;
+  },
   data() {
     return {
-      mapSettings,
       markers: [
         {
           id: "a",
@@ -48,7 +54,7 @@ export default {
         }
       ]
     };
-  }
+  },
 };
 </script>
 
