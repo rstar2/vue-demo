@@ -12,7 +12,7 @@
           <h3>1 - {{ $t("dialog.body", {msg: 'hello'}) }}</h3>
         </v-flex>
         <v-flex xs12 sm3>
-          <h3>2 -{{ $t("dialog.bodyList", ['hello']) }}</h3>
+          <h3>2 - {{ $t("dialog.bodyList", ['hello']) }}</h3>
         </v-flex>
         <v-flex xs12 sm3>
           <h3> {{ text }}</h3>
