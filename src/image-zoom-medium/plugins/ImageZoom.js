@@ -2,32 +2,30 @@ import mediumZoom from 'medium-zoom';
 
 // some default options
 const optionsDefaults = {
-    // Retrieves the current logged in user that is posting a comment
-    commenterSelector() {
-        return {
-            id: null,
-            fullName: 'Anonymous',
-            initials: '--',
-            email: null
-        };
-    },
-    data: {
-        // Hash object of all elements that can be commented on
-        targets: {},
-        onCreate(created) {
-            this.targets[created.targetId].comments.push(created);
-        },
-        onEdit(edited) {
-            // This is obviously not necessary
-            // It's there to illustrate what could be done in the callback of a remote call
-            let comments = this.targets[edited.targetId].comments;
-            comments.splice(comments.indexOf(edited), 1, edited);
-        },
-        onRemove(removed) {
-            let comments = this.targets[removed.targetId].comments;
-            comments.splice(comments.indexOf(removed), 1);
-        }
-    }
+    // The space outside the zoomed image
+    margin: 24,
+
+    // The background of the overlay
+    background: '#BADA55',
+
+    // The number of pixels to scroll to close the zoom
+    scrollOffset: 0,
+
+    // The zoom is by default rendered in the window viewport.
+    // You can also render your image in any element of the DOM, or any custom coordinates with the container option.
+    // container: '#zoom-container',
+
+    // You might want to render the zoom in your own template.
+    // You could reproduce zooms as seen on Facebook or Dropbox Paper. This is possible with the template option.
+    // <template id="zoom-template">
+    //   <div>
+    //     <header>My image zoom template</header>
+    //     <div id="zoom-container"></div>
+    //     <aside>Comment on my image</aside>
+    //   </div>
+    // </template>
+    // container: '#zoom-container',
+    // template: '#zoom-template',
 };
 
 export default {
@@ -37,14 +35,14 @@ export default {
         // Merge options argument into options defaults
         const options = { ...optionsDefaults, ...opts };
 
-        const zoom = mediumZoom();
+        // https://github.com/francoischalifour/medium-zoom#usage
+        const zoom = mediumZoom(null, options);
 
         // 2. Make the root instance available in all components
         Vue.prototype.$imageZoom = zoom;
 
 
         // 3. Register custom directive tha enables zooming on the image
-        // TODO: Use directive value
         Vue.directive('image-zoom', {
             bind(el, binding) {
                 if (binding.value) {
