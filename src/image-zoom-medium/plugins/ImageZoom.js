@@ -43,7 +43,7 @@ export default {
         Vue.prototype.$imageZoom = zoom;
 
 
-        // 3. Register custom directive tha enables zooming on the image
+        // 3. Register custom directive that enables zooming on the image
         // TODO: Use directive value
         Vue.directive('image-zoom', {
             bind(el, binding) {
