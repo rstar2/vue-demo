@@ -31,6 +31,17 @@ export default {
       persons: []
     };
   },
+  beforeMount() {
+    this.getUsers();
+  },
+  mounted() {
+    // with VueJS the 'this' inside the 'this.onScroll' will be the concrete Vue instance
+    // and not the global window instance (or the event source taret) as normally in window.addEventListener()
+    window.addEventListener('scroll', this.onScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.onScroll);
+  },
   methods: {
     getUsers(count = 5) {
       for (let i = 0; i < count; i++) {
@@ -38,19 +49,10 @@ export default {
           this.persons.push(response.data.results[0]);
         });
       }
-    }
-  },
-  filters: {
-    formatDate(date) {
-      return moment(date).format("YYYY-MM-DD");
-    }
-  },
+    },
 
-  beforeMount() {
-    this.getUsers();
-  },
-  mounted() {
-    window.onscroll = () => {
+    // NOTE: Don;t make it arrow function
+    onScroll() {
       let bottomOfWindow =
         document.documentElement.scrollTop + window.innerHeight ===
         document.documentElement.offsetHeight;
@@ -58,7 +60,12 @@ export default {
       if (bottomOfWindow) {
         this.getUsers(3);
       }
-    };
+    }
+  },
+  filters: {
+    formatDate(date) {
+      return moment(date).format("YYYY-MM-DD");
+    }
   }
 };
 </script>
