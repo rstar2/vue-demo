@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Simple DnD directive</h2>
-    <h3>1. Nnative DnD wrap - so no mobile.touch support</h3>
+    <h3>1. Native DnD wrap - so no mobile.touch support</h3>
     <h3>2. No model sync - has to do it explicitly in the callbacks</h3>
     <div>
       <h3>Some Tasks</h3>

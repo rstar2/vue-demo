@@ -8,7 +8,9 @@ Vue.directive('dnd', {
             // Need to set to something or else drag doesn't start
             e.dataTransfer.setData('text', '*');
 
-            // emit event to the parent component (Note this is not the component that uses the directive, but the parent)
+            // vnode.context is the component that the vnode is rendered in
+            // emit event to the parent component (Note this is not the component that uses the directive,
+            // but the component this 'vnode' is rendered (e.g. 'vnode' is rendered in 'vnode.context' scope)
             vnode.context.$emit('drag-start', e);
 
             // call a callback method on the direct element using the directive
