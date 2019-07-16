@@ -81,6 +81,14 @@ module.exports = {
                 options: {
                     name: '[name].[ext]?[hash]',
                     outputPath: 'assets/',
+                    // name: (file) => {
+                    //     // console.log('Asset name', file);
+                    //     return '[path][name].[ext]?[hash]';
+                    // },
+                    // outputPath: (url, resourcePath, context) => {
+                    //     // console.log('Asset output', url, resourcePath);
+                    //     return 'assets/';
+                    // },
                 }
             },
             {

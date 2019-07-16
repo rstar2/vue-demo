@@ -2,13 +2,13 @@
   <!-- Lazy-load images in <picture>. <img> is the one driving image
       loading so <picture> and srcset fall off of that
   -->
-  <picture class="lazy">
+  <picture :class="{ lazy: !this.isLoaded }">
     <template v-if="isLazyLoaded">
       <source v-for="(source, index) in sources" :key="index"
          :srcset="source.src" :media="`(min-width: ${source.minWidth}px)`" >
     </template>
-    <!-- NOTE: :[attr]="attr" is an conditional adding of listener, from 2.6.0+  -->
-    <img :src="isLazyLoaded ? src : placeholder" :alt="alt" :[loadingAttr]="lazy" />
+    <!-- NOTE: @[listener]="handler" :[attr]="attr" is an conditional adding of listener/attr, from 2.6.0+  -->
+    <img :src="isLazyLoaded ? src : placeholder" :alt="alt" :[loadingAttr]="'lazy'" />
   </picture>
 </template>
 
@@ -46,7 +46,10 @@ export default {
       return this.supportLazyLoading || this.isLoaded;
     },
     loadingAttr() {
-      return this.supportLazyLoading ?' loading' : null;
+      return this.supportLazyLoading ? 'loading' : null;
+    },
+    classes() {
+      return ;
     }
   },
   mounted() {

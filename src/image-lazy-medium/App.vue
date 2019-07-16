@@ -1,16 +1,76 @@
 <template>
   <div>
-    <ImageLazy src="./assets/image1.png" :sources="[{src: './assets/image1.png', minWidth: 300}]"/>
-    <hr style="margin:250px 0" />
-    <ImageLazy src="./assets/image2.png" />
-    <hr style="margin:250px 0" />
-    <ImageLazy src="./assets/image3.png" />
-    <hr style="margin:250px 0" />
-    <ImageLazy src="./assets/image4.png" />
+    <image-lazy v-for="(_, index) in images"  :key="index" :index="index" />
   </div>
 </template>
 
 <script>
+const images = Array(11);
+images.forEach((_, index) => {
+    const i = index + 1;
+    require(`./assets/image${i}.jpg`);
+    require(`./assets/resized/image${i}_tiny.jpg`);
+});
+
+const imageComponent = {
+  template:
+    `<div>
+      <ImageLazy
+        :src="src"
+        :placeholder="placeholder"
+        :sources="sources"/>
+      <hr style="margin:250px 0"/>
+    </div>`,
+  props: {
+    index: {type: Number, required: true}
+  },
+  computed: {
+    src() {
+      return this.getImageSrc();
+    },
+    placeholder() {
+      return this.getImageSrc(true);
+    },
+    sources() {
+      // TODO: make the gulp file resize to some other sizes
+      return [];
+      // const widths = [300, 600, 900];
+      // return widths.map(width => {
+      //   return {src: this.getImageSrc(width), minWidth: width};
+      // });
+    }
+  },
+  methods: {
+    /**
+     * @param {Boolean|Number} [option] if true - this is for placehoder,
+     *                                  if number - this is width param
+     */
+    getImageSrc(option) {
+      let prefix = '';
+      let suffix = '';
+      if (option) {
+        // all assets/images are served from the 'assets' folder - on build time in webpack.config.js
+        // even though the source resources can be are in the relative assets/resized
+        // prefix = 'resized/';
+        if (true === option) {
+          suffix = '_tiny';
+        } else {
+          suffix = `_${option}w`;
+        }
+
+      }
+      return `./assets/${prefix}image${this.index+1}${suffix}.jpg`;
+    },
+  }
+
+}
+
+export default {
+  components: {'image-lazy' : imageComponent},
+  beforeCreate() {
+    this.images = images;
+  }
+}
 </script>
 
 <style>
