@@ -3,7 +3,7 @@
 import ImageLazy from './ImageLazy.vue';
 
 const supportLazyLoading = 'loading' in HTMLImageElement.prototype;
-const supportIntersectionObserver = false; //'IntersectionObserver' in window;
+const supportIntersectionObserver = 'IntersectionObserver' in window;
 
 const optionsDefault = {
     // The element that is used as the viewport for checking visiblity of the target.
