@@ -3,18 +3,22 @@
       loading so <picture> and srcset fall off of that
   -->
   <picture :class="{ lazy: !this.isLoaded }">
-    <template v-if="isLazyLoaded">
-      <source v-for="(source, index) in sources" :key="index"
-         :srcset="source.src" :media="`(min-width: ${source.minWidth}px)`" />
+    <template v-if="isLazyLoading">
+      <source
+        v-for="(source, index) in sources"
+        :key="index"
+        :srcset="source.src"
+        :media="`(min-width: ${source.minWidth}px)`"
+      />
     </template>
     <!-- NOTE: @[listener]="handler" :[attr]="attr" is an conditional adding of listener/attr, from 2.6.0+  -->
-    <img :src="isLazyLoaded ? src : placeholder" :alt="alt" :[loadingAttr]="'lazy'" />
+    <img :src="isLazyLoading ? src : placeholder" :alt="alt" :[loadingAttr]="'lazy'" />
   </picture>
 </template>
 
 <script>
 export default {
-  name: 'ImageLazy',
+  name: "ImageLazy",
   props: {
     src: {
       type: String,
@@ -22,11 +26,11 @@ export default {
     },
     placeholder: {
       type: String,
-      defaut: ''
+      defaut: ""
     },
     alt: {
       type: String,
-      defaut: ''
+      defaut: ""
     },
     sources: {
       type: Array,
@@ -35,62 +39,56 @@ export default {
   },
   data() {
     return {
-      isLazy: false,
+      isToLoad: false,
       isLoading: false,
       isLoaded: false
-    }
+    };
   },
   computed: {
     supportLazyLoading() {
       return this.$imageLazy.supportLazyLoading;
     },
-    isLazyLoaded() {
-      return this.supportLazyLoading || this.isLoaded;
+    loadingAttr() {
+      return this.supportLazyLoading ? "loading" : null;
     },
     isLazyLoading() {
       return this.supportLazyLoading || this.isLoading;
-    },
-    loadingAttr() {
-      return this.supportLazyLoading ? 'loading' : null;
-    },
-    classes() {
-      return ;
     }
   },
   watch: {
-  isLazyLoading: {
-    immediate: true,
-    handler(isLazyLoading) {
-      if (isLazyLoading) {
-        const sources = this.$el.children;
-        for (let s = 0; s < sources.length; s++) {
+    isToLoad(isToLoad) {
+        if (isToLoad) {
+          const sources = this.$el.children;
+          for (let s = 0; s < sources.length; s++) {
             const source = sources[s];
-            source.addEventListener('load', this.load)
+            source.addEventListener("load", this.loaded);
+          }
+
+          this.isLoading = true;
         }
-      }
     }
-  }
   },
   mounted() {
-    this.$imageLazy.observe(this);
+    if (this.$imageLazy.supportLazyLoading) {
+        console.log("Lazy loading (natively) image ", this.src);
+        this.isToLoad = true;
+    } else {
+      this.$imageLazy.observe(this);
+    }
   },
   methods: {
     $load() {
       // called by the ImageLazy.js plugin
-      console.log('Lazy loading image ', this.src);
+      console.log("Lazy loading image ", this.src);
       this.isToLoad = true;
     },
     loaded() {
-      // this means that the placeholder has been loaded
-      if (!this.isLazyLoading) return;
-
-      console.log('Lazy loaded image ', this.src);
+      // called whne the "real" src image is loaded (either from the img tag or from any of the source tags)
+      console.log("Lazy loaded image ", this.src);
       this.isLoaded = true;
     }
   }
-
-
-}
+};
 </script>
 
 <style>
