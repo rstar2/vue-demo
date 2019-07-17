@@ -1,15 +1,18 @@
 <template>
   <div>
-    <image-lazy v-for="(_, index) in images"  :key="index" :index="index" />
+    <image-lazy v-for="(_, index) in images" :key="index" :index="index" />
   </div>
 </template>
 
 <script>
 const images = Array(11);
+const sourcesWidths = [200, 400, 800];
+
+// let Wbpack import all assets so that they appear in the build folder
 images.forEach((_, index) => {
     const i = index + 1;
     require(`./assets/image${i}.jpg`);
-    require(`./assets/resized/image${i}_tiny.jpg`);
+    ['tiny', ...sourcesWidths].map(suffix => require(`./assets/resized/image${i}_${suffix}.jpg`));
 });
 
 const imageComponent = {
@@ -32,12 +35,14 @@ const imageComponent = {
       return this.getImageSrc(true);
     },
     sources() {
-      // TODO: make the gulp file resize to some other sizes
-      return [];
-      // const widths = [300, 600, 900];
-      // return widths.map(width => {
-      //   return {src: this.getImageSrc(width), minWidth: width};
-      // });
+      const sources = sourcesWidths.map(width => {
+        return {src: this.getImageSrc(width), minWidth: width};
+      });
+
+      // after some min width use the real-defualt image
+      sources.push({src: this.src, minWidth: 1000})
+
+      return sources;
     }
   },
   methods: {
@@ -55,7 +60,7 @@ const imageComponent = {
         if (true === option) {
           suffix = '_tiny';
         } else {
-          suffix = `_${option}w`;
+          suffix = `_${option}`;
         }
 
       }

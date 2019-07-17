@@ -5,7 +5,7 @@
   <picture :class="{ lazy: !this.isLoaded }">
     <template v-if="isLazyLoading">
       <source
-        v-for="(source, index) in sources"
+        v-for="(source, index) in sourcesSorted"
         :key="index"
         :srcset="source.src"
         :media="`(min-width: ${source.minWidth}px)`"
@@ -53,6 +53,9 @@ export default {
     },
     isLazyLoading() {
       return this.supportLazyLoading || this.isLoading;
+    },
+    sourcesSorted() {
+      return this.sources.sort((source1, source2) => source2.minWidth - source1.minWidth)
     }
   },
   watch: {
