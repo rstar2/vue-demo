@@ -49,3 +49,4 @@ pages:
   artifacts:
     paths:
       - public
+      - /root/.npm/_logs
