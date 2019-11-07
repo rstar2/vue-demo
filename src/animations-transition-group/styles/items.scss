@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 $base-color: #3b8272;
 $percentage: 15;
 
@@ -10,6 +12,7 @@ $percentage: 15;
 }
 
 .projectCard {
+  transition: all 0.5s ease;
   position: relative;
   width: calc(100% / 3 - 20px);
   margin: 10px;
@@ -27,6 +30,9 @@ $percentage: 15;
     }
   }
 
+  // NOTE: For he transitioning elements in the <transition-group> tag (e.g. this 'projectCard__gallery')
+  // One important note is that these FLIP transitions do not work with elements set to display: inline.
+  // As an alternative, you can use display: inline-block or place elements in a flex context.
   &__gallery {
     display: flex;
     flex-wrap: wrap;
