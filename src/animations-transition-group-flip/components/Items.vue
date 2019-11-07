@@ -34,30 +34,21 @@
 
 <script>
 import { shuffle } from "lodash";
-
 import flipElement from "../utils/flipElement";
-
 const DURATION = 500;
-
 
 export default {
   data() {
     return {
+      showOverlay: false,
       projects: [...Array(10).keys()],
       selectedProject: null
     };
   },
-  computed: {
-    showOverlay() {
-      return null !== selectedProject;
-    }
-  },
-
   methods: {
     shuffleList() {
       this.projects = shuffle(this.projects);
     },
-
     handleClick(n) {
       const element = document.querySelector(`#projectCard-${n}`);
       flipElement({
@@ -89,7 +80,6 @@ export default {
       });
     }
   }
-  }
 };
 </script>
 
@@ -97,13 +87,14 @@ export default {
 @import '../styles/items.scss';
 
 .shuffleButton {
-  transition: all .2s ease;
+  transition: all 0.2s ease;
   background: #084a25;
   width: auto;
   border-radius: 4px;
   font-size: 25px;
   padding: 10px 20px;
-  box-shadow: 0px 4px 0 4px #06332e, inset 1px 5px 23px 11px #00b8ff4f, 0 8px 17px 8px #43e5ff87, 0 -3px 26px 10px #07247787;
+  box-shadow: 0px 4px 0 4px #06332e, inset 1px 5px 23px 11px #00b8ff4f,
+    0 8px 17px 8px #43e5ff87, 0 -3px 26px 10px #07247787;
   margin-bottom: 17px;
 }
 </style>

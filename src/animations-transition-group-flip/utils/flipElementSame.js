@@ -1,13 +1,20 @@
-const flipElement = async ({
-    element,
+/**
+ * Implementation of the FLIP animation technique
+ * https://css-tricks.com/animating-layouts-with-the-flip-technique/
+ * @param {Element|String} selector
+ * @param {Promise} triggerAction
+ * @param {Number} duration
+ * @param {Function} finishedHandler
+ */
+const flipElement = async (
+    selector,
     triggerAction,
     duration = 300,
-    initialZindex = 1,
-    finalZindex = 1,
     finishedHandler = () => {}
-}) => {
-    const elm = element;
-    // https://css-tricks.com/animating-layouts-with-the-flip-technique/
+) => {
+    const elm = selector instanceof Element ? selector :
+        document.querySelector(selector);
+
     // First: get the current bounds
     const first = elm.getBoundingClientRect();
 
@@ -30,7 +37,7 @@ const flipElement = async ({
     const animation = elm.animate(
         [
             {
-                zIndex: initialZindex,
+                zIndex: 201,
                 transformOrigin: 'top left',
                 transform: `
     translate(${deltaX}px, ${deltaY}px)
@@ -38,7 +45,7 @@ const flipElement = async ({
   `
             },
             {
-                zIndex: finalZindex,
+                zIndex: 201,
                 transformOrigin: 'top left',
                 transform: 'none'
             }
@@ -46,7 +53,7 @@ const flipElement = async ({
         {
             duration,
             easing: 'ease-in-out',
-            fill: 'none'
+            fill: 'both'
         }
     );
     animation.onfinish = finishedHandler;
