@@ -13,12 +13,12 @@ import Tooltip from "vue-directive-tooltip";
 Vue.use(Tooltip, {
   delay: 500,
   placement: "auto",
-  class: "tooltip-red",
+  // class: "tooltip-red",
   triggers: ["hover"],
   offset: 0
 });
 
-// import 'vue-directive-tooltip/css/index.css';
+// import 'vue-directive-tooltip/dist/vueDirectiveTooltip.css';
 
 export default {
   data() {
@@ -35,6 +35,6 @@ export default {
 </script>
 <style>
 /* The ~  represents the node_modules folder in webpack */
-@import "~vue-directive-tooltip/css/index.css";
+@import "~vue-directive-tooltip/dist/vueDirectiveTooltip.css";
 </style>
 
