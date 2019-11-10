@@ -41,7 +41,7 @@ $percentage: 15;
 
   &--selected {
     position: fixed;
-    margin-top: calc(50vh - 250px);
+    top: calc(50vh - 250px);
     z-index: 201;
     left: 0;
     right: 0;

@@ -1,0 +1,57 @@
+$buttonSize: 55px;
+
+$easeInOut: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+.hamburger {
+  appearance: none;
+  background: black;
+  border-radius: 50%;
+  height: $buttonSize;
+  position: relative;
+  width: $buttonSize;
+  float: right;
+  z-index: 101;
+
+  $root: &;
+
+  &--isOpen {
+    #{$root}__line {
+      &:nth-child(2) {
+        opacity: 0;
+        transform: rotate(45deg);
+      }
+      &:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(-7px, 7px);
+      }
+    }
+  }
+
+  &__lineWrapper {
+    transform: scale(0.8);
+    transform-origin: center center;
+    height: 41px;
+    width: 41px;
+    position: absolute;
+    top: 11px;
+  }
+
+  &__line {
+    background: white;
+    width: 40px;
+    height: 3px;
+    position: absolute;
+    transform-origin: center;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s $easeInOut;
+
+    @for $i from 1 through 3 {
+      &:nth-child(#{$i}) {
+        transform: translateY(12px * ($i - 1));
+      }
+    }
+  }
+}

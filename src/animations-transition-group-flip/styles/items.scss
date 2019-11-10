@@ -48,11 +48,10 @@ $percentage: 15;
     left: 0;
     right: 0;
     width: 588px;
-    height: 286px;
+    height: 360px;
     margin: 0 auto;
     z-index: 200;
-    top: 0;
-    margin-top: calc(50% - 180px);
+    top: calc(50% - 180px);
   }
 }
 

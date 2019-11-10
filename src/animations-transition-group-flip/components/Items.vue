@@ -51,33 +51,33 @@ export default {
     },
     handleClick(n) {
       const element = document.querySelector(`#projectCard-${n}`);
-      // flipElement({
-      //   element,
-      //   triggerAction: () => {
+      flipElement({
+        element,
+        triggerAction: () => {
           this.selectedProject = n;
           element.style = { zIndex: 200 };
-        // },
-        // duration: DURATION,
-        // initialZindex: 200,
-        // finalZindex: 200,
-        // finishedHandler: () => {
-        //   this.showOverlay = true;
-        // }
-      // });
+        },
+        duration: DURATION,
+        initialZindex: 200,
+        finalZindex: 200,
+        finishedHandler: () => {
+          this.showOverlay = true;
+        }
+      });
     },
     handleClose(n) {
       const element = document.querySelector(`#projectCard-${n}`);
-      // flipElement({
-      //   element,
-      //   triggerAction: () => {
+      flipElement({
+        element,
+        triggerAction: () => {
           this.showOverlay = false;
           this.selectedProject = null;
-      //   },
-      //   duration: DURATION,
-      //   initialZindex: 200,
-      //   finalZindex: 200,
-      //   finishedHandler: () => {}
-      // });
+        },
+        duration: DURATION,
+        initialZindex: 200,
+        finalZindex: 200,
+        finishedHandler: () => {}
+      });
     }
   }
 };
