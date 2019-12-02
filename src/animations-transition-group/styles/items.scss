@@ -30,7 +30,7 @@ $percentage: 15;
     }
   }
 
-  // NOTE: For he transitioning elements in the <transition-group> tag (e.g. this 'projectCard__gallery')
+  // NOTE: For the transitioning elements in the <transition-group> tag (e.g. this 'projectCard__gallery')
   // One important note is that these FLIP transitions do not work with elements set to display: inline.
   // As an alternative, you can use display: inline-block or place elements in a flex context.
   &__gallery {
@@ -51,13 +51,7 @@ $percentage: 15;
   }
 }
 
-$descriptionColWidth: 300px;
-
 .projectView {
-  img {
-    width: 100%;
-  }
-
   &__overlay {
     position: fixed;
     left: 0;
@@ -67,51 +61,5 @@ $descriptionColWidth: 300px;
     background: rgba($black, .5);
     color: $white;
     z-index: 200;
-  }
-
-  &__description {
-    width: $descriptionColWidth;
-    height: 100%;
-    position: absolute;
-  }
-
-  &__title {
-    margin-top: -96px;
-    position: fixed;
-    max-width: 100%;
-    transform: rotate(-3deg);
-
-    svg {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-    }
-
-    span {
-      position: relative;
-      margin: 10px 30px 11px;
-    }
-  }
-
-  &__gallery {
-    padding-left: $descriptionColWidth;
-    margin-left: 20px;
-  }
-
-  &__text {
-    margin: 10px 0;
-    border-top: 1px dashed $dashedLine;
-    padding-top: 10px;
-  }
-
-  .hamburger {
-    position: fixed;
-    padding-left: 21px;
-    margin-left: 868px;
-    margin-top: -156px;
-
-    &__lineWrapper {
-      transform: translate(16px, 3px);
-    }
   }
 }
