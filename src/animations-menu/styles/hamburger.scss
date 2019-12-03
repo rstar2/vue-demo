@@ -36,6 +36,7 @@ $easeInOut: cubic-bezier(0.68, -0.55, 0.27, 1.55);
     width: 41px;
     position: absolute;
     top: 11px;
+    left: 2px;
   }
 
   &__line {
@@ -54,4 +55,10 @@ $easeInOut: cubic-bezier(0.68, -0.55, 0.27, 1.55);
       }
     }
   }
+}
+
+.visuallyHidden {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
