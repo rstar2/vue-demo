@@ -23,7 +23,6 @@
     "d3-tile": "0.0.4",
     "dotenv-webpack": "^1.7.0",
     "epic-spinners": "^1.1.0",
-    "firebase": "^5.11.1",
     "google-maps-api-loader": "^1.1.1",
     "gsap": "^3.0.1",
     "lodash": "^4.17.15",
